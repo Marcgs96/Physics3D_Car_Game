@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "glmath.h"
 
 struct PhysVehicle3D;
 
@@ -25,4 +26,5 @@ public:
 	float turn;
 	float acceleration;
 	float brake;
+	float offset_x = 0;
 };

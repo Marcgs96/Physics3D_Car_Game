@@ -50,5 +50,5 @@ vec3 PhysBody3D::GetPos()
 {
 	btTransform t = body->getWorldTransform();
 	btVector3 pos = t.getOrigin();
-	return vec3();//{ pos.x, pos.y, pos.z };
+	return { pos.getX(), pos.getY(), pos.getZ() };
 }
