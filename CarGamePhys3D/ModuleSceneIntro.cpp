@@ -18,7 +18,7 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
-	App->physics->AddRamp({ 5, 28 , 0 }, 30, 15);
+	App->physics->AddRamp({ 5, 28 , 0 }, 30, 8);
 	App->physics->AddRamp({ 20, 9.6f , 0 }, 11, 12);
 
 	return ret;

@@ -98,7 +98,6 @@ bool ModulePlayer::Start()
 
 	vehicle = App->physics->AddVehicle(car);
 	vehicle->SetPos(0, 12, 10);
-	App->camera->Position.x = vehicle->GetPos().x;
 	
 	return true;
 }
@@ -115,7 +114,7 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update(float dt)
 {
 	turn = acceleration = brake = 0.0f;
-
+	speed = vehicle->GetKmh();
 
 	App->camera->Position.x = vehicle->GetPos().x;
 	App->camera->Position.y = vehicle->GetPos().y + 5;
@@ -124,7 +123,9 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
-		acceleration = MAX_ACCELERATION;
+		if (speed < MAX_VELOCITY) {
+			acceleration = MAX_ACCELERATION;
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
