@@ -333,22 +333,35 @@ PhysVehicle3D* ModulePhysics3D::AddVehicle(const VehicleInfo& info)
 	return pvehicle;
 }
 
-void ModulePhysics3D::AddRamp(vec3 position, int radius, int size)
+p2DynArray <Primitive> ModulePhysics3D::AddRamp(vec3 position, int radius, int size, bool loop, int dir)
 {
 	vec3 circle_center = { position.x, position.y+radius, position.z };
 	int angle = 180;
 	int angleoffset = 4;
+	float loopincr = 0;
+
+	p2DynArray <Primitive> cubes;
 
 	for (int i = 0; i < size; i++)
 	{
 		angle += angleoffset;
-		PhysBody3D* pbody = AddBody(Cube(10, 3, 3), 0);
+		loopincr+=0.2F;
+		Cube current_cube(10, 3, 3);
+		PhysBody3D* pbody = AddBody(current_cube, 0);
 		vec3 next_position = rotate(circle_center-position, angle, { 1, 0, 0});
 		btQuaternion rotation;
 		rotation.setRotation({ 1, 0, 0 }, angle * 3.14 / 180);
-		btTransform transform(rotation, {next_position.x + position.x, next_position.y+position.y, next_position.z+position.z});
+		btTransform transform;
+		if(loop)
+		{ 
+			transform = btTransform(rotation, { next_position.x + position.x + loopincr, next_position.y + position.y, (next_position.z + position.z) });
+		}else transform = btTransform(rotation, {next_position.x + position.x, next_position.y+position.y, next_position.z+position.z});
 		pbody->body->setWorldTransform(transform);
+
+		cubes.PushBack(current_cube);
 	}
+
+	return cubes;
 }
 
 // ---------------------------------------------------------

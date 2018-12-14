@@ -116,10 +116,13 @@ update_status ModulePlayer::Update(float dt)
 	turn = acceleration = brake = 0.0f;
 	speed = vehicle->GetKmh();
 
-	App->camera->Position.x = vehicle->GetPos().x;
-	App->camera->Position.y = vehicle->GetPos().y + 5;
-	App->camera->Position.z = vehicle->GetPos().z + 10;
+	vec3 forward_vector = vehicle->GetForwardVector();
+	
+	forward_vector = -forward_vector;
+	forward_vector = forward_vector * 16;
+	forward_vector.y = forward_vector.y + 5;
 
+	App->camera->Position = forward_vector + vehicle->GetPos();
 
 	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 	{
@@ -148,7 +151,8 @@ update_status ModulePlayer::Update(float dt)
 	}
 
 
-	App->camera->LookAt({ vehicle->GetPos().x, vehicle->GetPos().y + 5, vehicle->GetPos().z});
+	vec3 up_pos = { vehicle->GetPos().x, vehicle->GetPos().y + 5, vehicle->GetPos().z };
+	App->camera->LookAt(up_pos);
 
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);

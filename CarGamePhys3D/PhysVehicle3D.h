@@ -50,8 +50,10 @@ public:
 	void Brake(float force);
 	void Turn(float degrees);
 	float GetKmh() const;
-public:
+	vec3 GetForwardVector();
 
 	VehicleInfo info;
+private:
 	btRaycastVehicle* vehicle;
+
 };

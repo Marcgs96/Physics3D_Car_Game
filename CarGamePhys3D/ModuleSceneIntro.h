@@ -34,4 +34,6 @@ public:
 
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;
+
+	p2DynArray <Primitive> scene_elements;
 };

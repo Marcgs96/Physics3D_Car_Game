@@ -12,6 +12,7 @@ VehicleInfo::~VehicleInfo()
 // ----------------------------------------------------------------------------
 PhysVehicle3D::PhysVehicle3D(btRigidBody* body, btRaycastVehicle* vehicle, const VehicleInfo& info) : PhysBody3D(body), vehicle(vehicle), info(info)
 {
+	
 }
 
 // ----------------------------------------------------------------------------
@@ -92,4 +93,11 @@ void PhysVehicle3D::Turn(float degrees)
 float PhysVehicle3D::GetKmh() const
 {
 	return vehicle->getCurrentSpeedKmHour();
+}
+
+vec3 PhysVehicle3D::GetForwardVector()
+{
+	btVector3 btForward = vehicle->getForwardVector();
+	vec3 forward_vector; forward_vector.Set(btForward.getX(), btForward.getY(), btForward.getZ());
+	return forward_vector;
 }
