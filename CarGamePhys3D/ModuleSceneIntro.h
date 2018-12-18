@@ -19,10 +19,13 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
+	void CreateMap();
+
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 public:
 
+	Cube floor;
 	PhysBody3D* pb_chassis;
 	Cube p_chassis;
 
@@ -35,5 +38,7 @@ public:
 	PhysMotor3D* left_wheel;
 	PhysMotor3D* right_wheel;
 
-	p2DynArray <Primitive> scene_elements;
+	p2DynArray <Cube> scene_cubes;
+	p2DynArray <Sphere> scene_spheres;
+	p2DynArray <Cylinder> scene_cylinders;
 };

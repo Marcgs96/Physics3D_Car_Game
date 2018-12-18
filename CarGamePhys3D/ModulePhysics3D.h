@@ -32,7 +32,7 @@ public:
 	PhysBody3D* AddBody(const Cube& cube, float mass = 1.0f);
 	PhysBody3D* AddBody(const Cylinder& cylinder, float mass = 1.0f);
 	PhysVehicle3D* AddVehicle(const VehicleInfo& info);
-	p2DynArray <Primitive> AddRamp(vec3 position, int radius, int size, bool loop = false, int dir = 0);
+	p2DynArray <Cube> AddRamp(vec3 position, int radius, int size, bool loop = false, int dir = 0, int cube_size_x = 10, int cube_size_y = 3, int cube_size_z = 5);
 
 	void AddConstraintP2P(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB);
 	void AddConstraintHinge(PhysBody3D& bodyA, PhysBody3D& bodyB, const vec3& anchorA, const vec3& anchorB, const vec3& axisS, const vec3& axisB, bool disable_collision = false);
