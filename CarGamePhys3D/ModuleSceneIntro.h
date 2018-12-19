@@ -20,6 +20,7 @@ public:
 	bool CleanUp();
 
 	void CreateMap();
+	void CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr);
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 

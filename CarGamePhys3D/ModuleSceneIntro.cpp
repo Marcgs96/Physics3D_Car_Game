@@ -66,36 +66,15 @@ void ModuleSceneIntro::CreateMap()
 		scene_cubes.PushBack(reception_1[i]);
 	}
 
-	p2DynArray <Cube> ramp_2 = App->physics->AddRamp({ -180, 48 , 0 }, 50, 9, false);
+	p2DynArray <Cube> ramp_2 = App->physics->AddRamp({ -180, 16 , 0 }, 18, 87, true);
 
 	for (int i = 0; i < ramp_2.Count(); i++)
 	{
 		scene_cubes.PushBack(ramp_2[i]);
 	}
 
-	p2DynArray <Cube> reception_2 = App->physics->AddRamp({ -180, 68 , -150 }, 70, 8, false, 1, 20, 3, 7);
-
-	for (int i = 0; i < reception_2.Count(); i++)
-	{
-		scene_cubes.PushBack(reception_2[i]);
-	}
-
-
-	//p2DynArray <Cube> ramp_3 = App->physics->AddRamp({ -180, 48 , -80 }, 50, 7, false);
-
-	//for (int i = 0; i < ramp_3.Count(); i++)
-	//{
-	//	scene_cubes.PushBack(ramp_3[i]);
-	//}
-
-	p2DynArray <Cube> ramp_3 = App->physics->AddRamp({ 5, 15 , 0 }, 16, 85, true);
-
-	for (int i = 0; i < ramp_3.Count(); i++)
-	{
-		//scene_cubes.PushBack(ramp_3[i]);
-	}
-
-
+	CreateScorePoints({ -180, 1, 120 }, 4, 15);
+	CreateScorePoints({ -180, 1, -15 }, 3, 15);
 
 	Cube way1(20, 0, 400);
 	way1.color.Set(128, 0, 0, 1.F);
@@ -120,5 +99,19 @@ void ModuleSceneIntro::CreateMap()
 	floor = { 400, -1, 400 };
 	floor.color.Set(125, 125, 125, 0.25F);
 	scene_cubes.PushBack(floor);
+}
+
+void ModuleSceneIntro::CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr)
+{
+	for (int i = 0; i < num_points; i++)
+	{
+		Cube points(2, 2, 2);
+		points.color.Set(128, 128, 0, 1.F);
+		points.SetPos(starting_position.x, starting_position.y, starting_position.z + pos_incr);
+		scene_cubes.PushBack(points);
+		PhysBody3D* sensor = App->physics->AddBody(points, 0);
+		sensor->SetAsSensor(true);
+		pos_incr += 15;
+	}
 }
 
