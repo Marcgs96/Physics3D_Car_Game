@@ -97,7 +97,9 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(-180, 1, 180);
+	vehicle->SetPos(-190, 1, 180);
+	vehicle->SetType(PhysBody3D::type::PLAYER);
+	vehicle->collision_listeners.add(App->scene_intro);
 	
 	return true;
 }
@@ -110,6 +112,11 @@ bool ModulePlayer::CleanUp()
 	return true;
 }
 
+void ModulePlayer::OnCollision(PhysBody3D * body1, PhysBody3D * body2)
+{
+
+}
+
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
@@ -119,8 +126,8 @@ update_status ModulePlayer::Update(float dt)
 	vec3 forward_vector = vehicle->GetForwardVector();
 	
 	forward_vector = -forward_vector;
-	forward_vector = forward_vector * 16;
-	forward_vector.y = forward_vector.y + 5;
+	forward_vector = forward_vector * 10;
+	forward_vector.y = forward_vector.y+5;
 
 	App->camera->Position = forward_vector + vehicle->GetPos();
 

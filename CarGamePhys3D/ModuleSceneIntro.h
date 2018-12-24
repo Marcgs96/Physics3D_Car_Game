@@ -21,25 +21,18 @@ public:
 
 	void CreateMap();
 	void CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr);
+	void DestroyScorePoint(PhysBody3D* point);
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 public:
+	uint score = 0;
 
 	Cube floor;
-	PhysBody3D* pb_chassis;
-	Cube p_chassis;
 
-	PhysBody3D* pb_wheel;
-	Cylinder p_wheel;
-
-	PhysBody3D* pb_wheel2;
-	Cylinder p_wheel2;
-
-	PhysMotor3D* left_wheel;
-	PhysMotor3D* right_wheel;
-
-	p2DynArray <Cube> scene_cubes;
+	p2DynArray <Cube> scene_terrain;
+	p2DynArray <Cube> scene_points;
+	p2DynArray <PhysBody3D*> scene_points_pb;
 	p2DynArray <Sphere> scene_spheres;
 	p2DynArray <Cylinder> scene_cylinders;
 };

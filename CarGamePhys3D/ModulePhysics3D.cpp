@@ -89,18 +89,21 @@ update_status ModulePhysics3D::PreUpdate(float dt)
 
 			if(pbodyA && pbodyB)
 			{
-				p2List_item<Module*>* item = pbodyA->collision_listeners.getFirst();
-				while(item)
+				if (pbodyA->active && pbodyB->active)
 				{
-					item->data->OnCollision(pbodyA, pbodyB);
-					item = item->next;
-				}
+					p2List_item<Module*>* item = pbodyA->collision_listeners.getFirst();
+					while (item)
+					{
+						item->data->OnCollision(pbodyA, pbodyB);
+						item = item->next;
+					}
 
-				item = pbodyB->collision_listeners.getFirst();
-				while(item)
-				{
-					item->data->OnCollision(pbodyB, pbodyA);
-					item = item->next;
+					item = pbodyB->collision_listeners.getFirst();
+					while (item)
+					{
+						item->data->OnCollision(pbodyB, pbodyA);
+						item = item->next;
+					}
 				}
 			}
 		}
@@ -370,6 +373,18 @@ p2DynArray <Cube> ModulePhysics3D::AddRamp(vec3 position, int radius, int size, 
 	}
 
 	return cubes;
+}
+
+void ModulePhysics3D::DestroyBody(PhysBody3D * body)
+{
+	p2List_item <PhysBody3D*>* item;
+	for (item = bodies.getFirst(); item != bodies.getLast(); item = item->next)
+	{
+		if (item->data == body)
+		{
+			item->data->active = false;
+		}		
+	}
 }
 
 // ---------------------------------------------------------

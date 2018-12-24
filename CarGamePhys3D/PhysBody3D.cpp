@@ -4,7 +4,9 @@
 
 // =================================================
 PhysBody3D::PhysBody3D(btRigidBody* body) : body(body)
-{}
+{
+	body->setUserPointer(this);
+}
 
 // ---------------------------------------------------------
 PhysBody3D::~PhysBody3D()
@@ -65,3 +67,14 @@ vec3 PhysBody3D::GetPos()
 	btVector3 pos = t.getOrigin();
 	return { pos.getX(), pos.getY(), pos.getZ() };
 }
+
+PhysBody3D::type PhysBody3D::GetType()
+{
+	return my_type;
+}
+
+void PhysBody3D::SetType(type my_type)
+{
+	this->my_type = my_type;
+}
+
