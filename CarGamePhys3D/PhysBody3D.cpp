@@ -78,3 +78,10 @@ void PhysBody3D::SetType(type my_type)
 	this->my_type = my_type;
 }
 
+void PhysBody3D::SetRotation(btQuaternion rotation)
+{
+	btTransform t = body->getWorldTransform();
+	t.setRotation(rotation);
+	body->setWorldTransform(t);
+}
+

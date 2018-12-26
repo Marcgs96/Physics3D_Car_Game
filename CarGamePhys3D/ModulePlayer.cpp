@@ -97,7 +97,10 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(-190, 1, 180);
+	vehicle->SetPos(-175, 1, 190);
+	btQuaternion rotation;
+	rotation.setRotation({ 0, 1, 0 }, 3.14);
+	vehicle->SetRotation(rotation);
 	vehicle->SetType(PhysBody3D::type::PLAYER);
 	vehicle->collision_listeners.add(App->scene_intro);
 	

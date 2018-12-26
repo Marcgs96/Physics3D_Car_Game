@@ -5,6 +5,7 @@
 #include "Primitive.h"
 
 class btRigidBody;
+class btQuaternion;
 class Module;
 class vec3;
 
@@ -25,6 +26,7 @@ public:
 	vec3 GetPos();
 	type GetType();
 	void SetType(type my_type);
+	void SetRotation(btQuaternion rotation);
 
 	bool active = true;
 
