@@ -24,7 +24,7 @@ public:
 	void CreateRamps();
 	void CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr);
 	void DestroyScorePoint(PhysBody3D* point);
-
+	
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 public:
@@ -37,5 +37,8 @@ public:
 	p2DynArray <PhysBody3D*> scene_points_pb;
 	p2DynArray <Sphere> scene_spheres;
 	p2DynArray <Cylinder> scene_cylinders;
+
+	Timer* total_time = nullptr;
+
 
 };

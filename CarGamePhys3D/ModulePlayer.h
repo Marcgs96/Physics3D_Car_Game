@@ -31,4 +31,5 @@ public:
 	float speed;
 	float brake;
 	float offset_x = 0;
+	float max_height = 0;
 };

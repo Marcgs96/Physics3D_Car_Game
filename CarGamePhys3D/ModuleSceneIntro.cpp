@@ -22,6 +22,8 @@ bool ModuleSceneIntro::Start()
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
 	//App->physics->AddRamp({ 20, 9.6f , 0 }, 11, 12);
 
+	//total_time = new Timer();
+
 	return ret;
 }
 
@@ -59,6 +61,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		case PhysBody3D::type::POINT:
 			DestroyScorePoint(body2);
 			App->physics->DestroyBody(body2);
+			//TODO INCREMENT SCORE.
 			LOG("LUL");
 			break;
 		default:
