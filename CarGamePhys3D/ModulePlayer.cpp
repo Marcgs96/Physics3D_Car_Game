@@ -192,7 +192,7 @@ update_status ModulePlayer::Update(float dt)
 	}
 
 	char title[1000];
-	sprintf_s(title, "Max height: %.1f - velocity: %.1f Km/h", max_height, vehicle->GetKmh());
+	sprintf_s(title, "SCORE :%i Max height: %.1f - velocity: %.1f Km/h",App->scene_intro->score, max_height, vehicle->GetKmh());
 	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;

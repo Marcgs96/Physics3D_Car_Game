@@ -62,6 +62,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			DestroyScorePoint(body2);
 			App->physics->DestroyBody(body2);
 			//TODO INCREMENT SCORE.
+			score += 150;
 			LOG("LUL");
 			break;
 		default:
@@ -280,6 +281,10 @@ void ModuleSceneIntro::CreateMap()
 
 	CreateScorePoints({ -175, 1, 120 }, 4, 15);
 	CreateScorePoints({ -175, 1, -15 }, 3, 15);
+	CreateScorePoints({ -175, 1, -70 }, 3, 15);
+	CreateScorePoints({ -100, 40, -25 }, 3, 15);
+	CreateScorePoints({ -25, 26, -25 }, 3, 15);
+	CreateScorePoints({ 100, 1, 0 }, 3, 15);
 
 	p2DynArray <Cube> reception_2 = App->physics->AddRamp({ -100, 68 , 70}, 70, 7, false, 0, 40, 3, 5);
 
