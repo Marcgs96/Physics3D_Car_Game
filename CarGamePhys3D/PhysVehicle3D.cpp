@@ -51,6 +51,58 @@ void PhysVehicle3D::Render()
 
 
 	chassis.Render();
+	//--------------------------------------------------------------------------------
+	Cube chassis2(info.chassis_size2.x, info.chassis_size2.y, info.chassis_size2.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&chassis2.transform);
+	q = vehicle->getChassisWorldTransform().getRotation();
+	btVector3 offset2(info.chassis_offset2.x, info.chassis_offset2.y, info.chassis_offset2.z);
+	offset2 = offset2.rotate(q.getAxis(), q.getAngle());
+
+	chassis2.transform.M[12] += offset2.getX();
+	chassis2.transform.M[13] += offset2.getY();
+	chassis2.transform.M[14] += offset2.getZ();
+
+
+	chassis2.Render();	
+	//--------------------------------------------------------------------------------
+	Cube chassis3(info.chassis_size3.x, info.chassis_size3.y, info.chassis_size3.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&chassis3.transform);
+	q = vehicle->getChassisWorldTransform().getRotation();
+	btVector3 offset3(info.chassis_offset3.x, info.chassis_offset3.y, info.chassis_offset3.z);
+	offset3 = offset3.rotate(q.getAxis(), q.getAngle());
+
+	chassis3.transform.M[12] += offset3.getX();
+	chassis3.transform.M[13] += offset3.getY();
+	chassis3.transform.M[14] += offset3.getZ();
+
+
+	chassis3.Render();
+	//--------------------------------------------------------------------------------
+	Cube chassis4(info.chassis_size4.x, info.chassis_size4.y, info.chassis_size4.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&chassis4.transform);
+	q = vehicle->getChassisWorldTransform().getRotation();
+	btVector3 offset4(info.chassis_offset4.x, info.chassis_offset4.y, info.chassis_offset4.z);
+	offset4 = offset4.rotate(q.getAxis(), q.getAngle());
+
+	chassis4.transform.M[12] += offset4.getX();
+	chassis4.transform.M[13] += offset4.getY();
+	chassis4.transform.M[14] += offset4.getZ();
+
+
+	chassis4.Render();
+	//--------------------------------------------------------------------------------
+	Cube chassis5(info.chassis_size5.x, info.chassis_size5.y, info.chassis_size5.z);
+	vehicle->getChassisWorldTransform().getOpenGLMatrix(&chassis5.transform);
+	q = vehicle->getChassisWorldTransform().getRotation();
+	btVector3 offset5(info.chassis_offset5.x, info.chassis_offset5.y, info.chassis_offset5.z);
+	offset5 = offset5.rotate(q.getAxis(), q.getAngle());
+
+	chassis5.transform.M[12] += offset5.getX();
+	chassis5.transform.M[13] += offset5.getY();
+	chassis5.transform.M[14] += offset5.getZ();
+
+
+	chassis5.Render();
 }
 
 // ----------------------------------------------------------------------------
