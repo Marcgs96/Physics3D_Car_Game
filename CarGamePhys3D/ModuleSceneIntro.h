@@ -38,7 +38,7 @@ public:
 	p2DynArray <Sphere> scene_spheres;
 	p2DynArray <Cylinder> scene_cylinders;
 
-	Timer* total_time = nullptr;
+	//Timer* total_time = nullptr;
 
 
 };
