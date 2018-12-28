@@ -61,10 +61,13 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 		case PhysBody3D::type::POINT:
 			DestroyScorePoint(body2);
 			App->physics->DestroyBody(body2);
-			//TODO INCREMENT SCORE.
 			score += 150;
-			LOG("LUL");
 			break;
+		case PhysBody3D::type::CHECKPOINT: {
+			App->player->SetSavedPosition(body2->GetPos());
+			btQuaternion rotation(body2->GetRotation().getAxis(), body2->GetRotation().getAngle());
+			App->player->SetSavedRotation(rotation);
+		}break;
 		default:
 			break;
 		}
@@ -90,6 +93,9 @@ void ModuleSceneIntro::CreateMap()
 	wall12.SetPos(-150, 3, 10);
 	scene_terrain.PushBack(wall12);
 	App->physics->AddBody(wall12, 0);
+
+	btQuaternion rot({ 0, 1, 0 }, 0.5*3.14);
+	CreateCheckPoint({ -145, 0, -189 }, { 20, 4, 5 }, rot);
 
 	Cube way2(80, 0.2F, 25);
 	way2.color.Set(128, 0, 0, 1.F);
@@ -125,6 +131,9 @@ void ModuleSceneIntro::CreateMap()
 	scene_terrain.PushBack(wall32);
 	App->physics->AddBody(wall32, 0);
 
+	rot.setRotation({ 0, 1, 0 }, 0);
+	CreateCheckPoint({ -100, 0, 155 }, {45, 4, 5}, rot);
+
 	Cube way4(100, 0.2F, 25);
 	way4.color.Set(128, 0, 0, 1.F);
 	way4.SetPos(-100, 0, 187.5F);
@@ -159,6 +168,9 @@ void ModuleSceneIntro::CreateMap()
 	scene_terrain.PushBack(wall52);
 	App->physics->AddBody(wall52, 0);
 
+	rot.setRotation({ 0, 1, 0 }, 0.5*3.14);
+	CreateCheckPoint({ 0, 0, -189 }, { 20, 4, 5 }, rot);
+
 	Cube way6(80, 0.2F, 25);
 	way6.color.Set(128, 0, 0, 1.F);
 	way6.SetPos(35, 0, -187.5F);
@@ -192,6 +204,8 @@ void ModuleSceneIntro::CreateMap()
 	wall72.SetPos(65, 3, -12);
 	scene_terrain.PushBack(wall72);
 	App->physics->AddBody(wall72, 0);
+
+	//CreateCheckPoint({ 100, 0, 185 });
 
 	Cube way8(100, 0.2F, 25);
 	way8.color.Set(128, 0, 0, 1.F);
@@ -300,7 +314,7 @@ void ModuleSceneIntro::CreateMap()
 		scene_terrain.PushBack(ramp_5[i]);
 	}
 
-	p2DynArray <Cube> reception_3 = App->physics->AddRamp({ -30, 68 , -120 }, 70, 7, false, 1, 40, 3, 7);
+	p2DynArray <Cube> reception_3 = App->physics->AddRamp({ -30, 68 , -100 }, 70, 7, false, 1, 40, 3, 7);
 
 	for (int i = 0; i < reception_3.Count(); i++)
 	{
@@ -386,5 +400,14 @@ void ModuleSceneIntro::DestroyScorePoint(PhysBody3D* point)
 			scene_points_pb.Pop(scene_points_pb[i]);
 		}
 	}
+}
+
+void ModuleSceneIntro::CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotation)
+{
+	PhysBody3D* checkpoint = App->physics->AddBody(Cube(size.x, size.y, size.z), 0);
+	checkpoint->SetAsSensor(true);
+	checkpoint->SetType(PhysBody3D::type::CHECKPOINT);
+	checkpoint->SetPos(pos.x, pos.y, pos.z);
+	checkpoint->SetRotation(rotation);
 }
 

@@ -21,7 +21,12 @@ public:
 	update_status Update(float dt);
 	bool CleanUp();
 
-	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);;
+	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
+	vec3 GetSavedPosition();
+	void SetSavedPosition(vec3 pos);
+	btQuaternion GetSavedRotation();
+	void SetSavedRotation(btQuaternion rotation);
+
 
 public:
 
@@ -32,4 +37,6 @@ public:
 	float brake;
 	float offset_x = 0;
 	float max_height = 0;
+	vec3 saved_position = { -175, 1, 190 };
+	btQuaternion saved_rotation;
 };

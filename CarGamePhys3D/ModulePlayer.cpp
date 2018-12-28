@@ -113,6 +113,7 @@ bool ModulePlayer::Start()
 	vehicle->SetPos(-175, 1, 190);
 	btQuaternion rotation;
 	rotation.setRotation({ 0, 1, 0 }, 3.14);
+	saved_rotation = rotation;
 	vehicle->SetRotation(rotation);
 	vehicle->SetType(PhysBody3D::type::PLAYER);
 	vehicle->collision_listeners.add(App->scene_intro);
@@ -131,6 +132,26 @@ bool ModulePlayer::CleanUp()
 void ModulePlayer::OnCollision(PhysBody3D * body1, PhysBody3D * body2)
 {
 
+}
+
+vec3 ModulePlayer::GetSavedPosition()
+{
+	return saved_position;
+}
+
+void ModulePlayer::SetSavedPosition(vec3 pos)
+{
+	saved_position = pos;
+}
+
+btQuaternion ModulePlayer::GetSavedRotation()
+{
+	return saved_rotation;
+}
+
+void ModulePlayer::SetSavedRotation(btQuaternion rotation)
+{
+	saved_rotation = rotation;
 }
 
 // Update: draw background
@@ -172,6 +193,13 @@ update_status ModulePlayer::Update(float dt)
 	{
 		brake = BRAKE_POWER;
 		acceleration = -MAX_ACCELERATION;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		vehicle->SetPos(saved_position.x, saved_position.y, saved_position.z);
+		vehicle->SetRotation(saved_rotation);
+		vehicle->GetBody()->clearForces();
 	}
 
 

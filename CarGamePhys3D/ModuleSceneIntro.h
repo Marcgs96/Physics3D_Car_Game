@@ -8,6 +8,7 @@
 
 struct PhysBody3D;
 struct PhysMotor3D;
+class btQuaternion;
 
 class ModuleSceneIntro : public Module
 {
@@ -24,6 +25,7 @@ public:
 	void CreateRamps();
 	void CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr);
 	void DestroyScorePoint(PhysBody3D* point);
+	void CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotation);
 	
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 

@@ -13,7 +13,7 @@ class vec3;
 struct PhysBody3D
 {
 	friend class ModulePhysics3D;
-	enum class type {PLAYER, POINT};
+	enum class type {PLAYER, POINT, CHECKPOINT};
 public:
 	PhysBody3D(btRigidBody* body);
 	~PhysBody3D();
@@ -24,9 +24,12 @@ public:
 	void SetPos(float x, float y, float z);
 	void SetAsSensor(bool is_sensor);
 	vec3 GetPos();
+	btQuaternion GetRotation();
 	type GetType();
 	void SetType(type my_type);
 	void SetRotation(btQuaternion rotation);
+
+	btRigidBody* GetBody();
 
 	bool active = true;
 

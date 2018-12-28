@@ -68,6 +68,13 @@ vec3 PhysBody3D::GetPos()
 	return { pos.getX(), pos.getY(), pos.getZ() };
 }
 
+btQuaternion PhysBody3D::GetRotation()
+{
+	btTransform t = body->getWorldTransform();
+	btQuaternion rot = t.getRotation();
+	return rot;
+}
+
 PhysBody3D::type PhysBody3D::GetType()
 {
 	return my_type;
@@ -83,5 +90,10 @@ void PhysBody3D::SetRotation(btQuaternion rotation)
 	btTransform t = body->getWorldTransform();
 	t.setRotation(rotation);
 	body->setWorldTransform(t);
+}
+
+btRigidBody * PhysBody3D::GetBody()
+{
+	return body;
 }
 
