@@ -161,12 +161,14 @@ update_status ModulePlayer::Update(float dt)
 	speed = vehicle->GetKmh();
 
 	vec3 forward_vector = vehicle->GetForwardVector();
+	vec3 upward_vector = vehicle->GetUpwardVector();
 	
 	forward_vector = -forward_vector;
-	forward_vector = forward_vector * 10;
-	forward_vector.y = forward_vector.y+5;
+	forward_vector = forward_vector * 11;
+	upward_vector = upward_vector * 5;
 
-	App->camera->Position = forward_vector + vehicle->GetPos();
+	vec3 campos = forward_vector + upward_vector;
+	App->camera->Position = campos + vehicle->GetPos();
 
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{

@@ -156,7 +156,7 @@ vec3 PhysVehicle3D::GetForwardVector()
 
 vec3 PhysVehicle3D::GetUpwardVector()
 {
-	btVector3 btUpward = vehicle->getForwardVector();
+	btVector3 btUpward = vehicle->getUpwardVector();
 	vec3 uprward_vector; uprward_vector.Set(btUpward.getX(), btUpward.getY(), btUpward.getZ());
 	return uprward_vector;
 }
