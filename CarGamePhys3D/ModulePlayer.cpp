@@ -191,11 +191,15 @@ update_status ModulePlayer::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		brake = BRAKE_POWER;
 		acceleration = -MAX_ACCELERATION;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		brake = BRAKE_POWER;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		vehicle->SetPos(saved_position.x, saved_position.y, saved_position.z);
 		vehicle->SetRotation(saved_rotation);

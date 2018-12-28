@@ -179,6 +179,18 @@ public:
 		return forwardW;
 	}
 
+	btVector3 getUpwardVector() const
+	{
+		const btTransform& chassisTrans = getChassisWorldTransform();
+
+		btVector3 upwardW(
+			chassisTrans.getBasis()[0][m_indexUpAxis],
+			chassisTrans.getBasis()[1][m_indexUpAxis],
+			chassisTrans.getBasis()[2][m_indexUpAxis]);
+
+		return upwardW;
+	}
+
 	///Velocity of vehicle (positive if velocity vector has same direction as foward vector)
 	btScalar	getCurrentSpeedKmHour() const
 	{

@@ -59,6 +59,7 @@ public:
 	void Turn(float degrees);
 	float GetKmh() const;
 	vec3 GetForwardVector();
+	vec3 GetUpwardVector();
 
 	VehicleInfo info;
 private:
