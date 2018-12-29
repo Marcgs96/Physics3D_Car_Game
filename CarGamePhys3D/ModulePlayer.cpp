@@ -110,11 +110,6 @@ bool ModulePlayer::Start()
 	car.wheels[3].steering = false;
 
 	vehicle = App->physics->AddVehicle(car);
-	vehicle->SetPos(-175, 1, 190);
-	btQuaternion rotation;
-	rotation.setRotation({ 0, 1, 0 }, 3.14);
-	saved_rotation = rotation;
-	vehicle->SetRotation(rotation);
 	vehicle->SetType(PhysBody3D::type::PLAYER);
 	vehicle->collision_listeners.add(App->scene_intro);
 	
@@ -132,6 +127,16 @@ bool ModulePlayer::CleanUp()
 void ModulePlayer::OnCollision(PhysBody3D * body1, PhysBody3D * body2)
 {
 
+}
+
+void ModulePlayer::SetPosition(int x, int y, int z)
+{
+	vehicle->SetPos(x, y, z);
+}
+
+void ModulePlayer::SetRotation(btQuaternion rot)
+{
+	vehicle->SetRotation(rot);
 }
 
 vec3 ModulePlayer::GetSavedPosition()
@@ -152,6 +157,11 @@ btQuaternion ModulePlayer::GetSavedRotation()
 void ModulePlayer::SetSavedRotation(btQuaternion rotation)
 {
 	saved_rotation = rotation;
+}
+
+float ModulePlayer::GetVehicleSpeed()
+{
+	return speed;
 }
 
 // Update: draw background
@@ -222,10 +232,6 @@ update_status ModulePlayer::Update(float dt)
 	{
 		max_height = vehicle->GetPos().y;
 	}
-
-	char title[1000];
-	sprintf_s(title, "SCORE :%i Max height: %.1f - velocity: %.1f Km/h",App->scene_intro->score, max_height, vehicle->GetKmh());
-	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
 }

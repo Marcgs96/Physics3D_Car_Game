@@ -13,7 +13,7 @@ class vec3;
 struct PhysBody3D
 {
 	friend class ModulePhysics3D;
-	enum class type {PLAYER, POINT, CHECKPOINT};
+	enum class type {PLAYER, POINT, CHECKPOINT, END};
 public:
 	PhysBody3D(btRigidBody* body);
 	~PhysBody3D();

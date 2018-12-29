@@ -1,11 +1,10 @@
-#include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
-#include "Primitive.h"
 #include "PhysBody3D.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -19,11 +18,14 @@ bool ModuleSceneIntro::Start()
 
 	CreateMap();
 
+	total_time = new Timer();
 
-	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
-	//App->physics->AddRamp({ 20, 9.6f , 0 }, 11, 12);
+	btQuaternion player_start_rot({ 0, 1, 0 }, 3.14);
 
-	//total_time = new Timer();
+	App->player->SetPosition(player_start_pos.x, player_start_pos.y, player_start_pos.z);
+	App->player->SetRotation(player_start_rot);
+	App->player->SetSavedPosition(player_start_pos);
+	App->player->SetSavedRotation(player_start_rot);
 
 	return ret;
 }
@@ -32,6 +34,18 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	for (int i = 0; i < scene_points_pb.Count(); i++)
+	{
+		scene_points_pb[i] = nullptr;
+	}
+
+	scene_points_pb.Clear();
+	scene_points.Clear();
+
+	scene_terrain.Clear();
+
+	total_time = nullptr;
 
 	return true;
 }
@@ -48,6 +62,22 @@ update_status ModuleSceneIntro::Update(float dt)
 	{
 		scene_points[i].Render();
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+	{
+		Win();
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		App->pause = false;
+	}
+
+	char title[1000];
+	Uint32 sec = total_time->Read() / 1000;
+	time_left = max_time_per_level - sec;
+	sprintf_s(title, "SECONDS LEFT: %u - SCORE :%i - MAX HEIGHT: %.1f - VELOCITY: %.1f Km/h", time_left, App->scene_intro->score, App->player->max_height, App->player->GetVehicleSpeed());
+	App->window->SetTitle(title);
 
 	return UPDATE_CONTINUE;
 }
@@ -68,15 +98,27 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			btQuaternion rotation(body2->GetRotation().getAxis(), body2->GetRotation().getAngle());
 			App->player->SetSavedRotation(rotation);
 		}break;
+		case PhysBody3D::type::END: {
+			Win();
+		}break;
 		default:
 			break;
 		}
 	}
+
+	if (time_left == 0)Lose();
 }
 
 void ModuleSceneIntro::CreateMap()
 {
 
+	CreateTerrain();
+	CreateRamps();
+	CreateAllScorePoints();
+}
+
+void ModuleSceneIntro::CreateTerrain()
+{
 	Cube way1(50, 0.2F, 400);
 	way1.color = White;
 	way1.SetPos(-170, 0, 0);
@@ -132,7 +174,7 @@ void ModuleSceneIntro::CreateMap()
 	App->physics->AddBody(wall32, 0);
 
 	rot.setRotation({ 0, 1, 0 }, 0);
-	CreateCheckPoint({ -100, 0, 155 }, {45, 4, 5}, rot);
+	CreateCheckPoint({ -100, 0, 155 }, { 45, 4, 5 }, rot);
 
 	Cube way4(100, 0.2F, 25);
 	way4.color = White;
@@ -250,7 +292,10 @@ void ModuleSceneIntro::CreateMap()
 	floor = { 400, 0, 400 };
 	floor.color = DarkGray;
 	scene_terrain.PushBack(floor);
+}
 
+void ModuleSceneIntro::CreateRamps()
+{
 	p2DynArray <Cube> ramp_1 = App->physics->AddRamp({ -175, 48 , 140 }, 50, 9, false);
 
 	for (int i = 0; i < ramp_1.Count(); i++)
@@ -278,7 +323,7 @@ void ModuleSceneIntro::CreateMap()
 	{
 		scene_terrain.PushBack(ramp_3[i]);
 	}
-	
+
 	p2DynArray <Cube> ramp_4 = App->physics->AddRamp({ -100, 48 , -100 }, 50, 9, false, 1, 20, 3, 7);
 
 	for (int i = 0; i < ramp_4.Count(); i++)
@@ -286,21 +331,7 @@ void ModuleSceneIntro::CreateMap()
 		scene_terrain.PushBack(ramp_4[i]);
 	}
 
-	//p2DynArray <Cube> ramp_3 = App->physics->AddRamp({ -0, 48 , 0 }, 50, 500, true);
-
-	//for (int i = 0; i < ramp_3.Count(); i++)
-	//{
-	//	scene_terrain.PushBack(ramp_3[i]);
-	//}
-
-	CreateScorePoints({ -175, 1, 120 }, 4, 15);
-	CreateScorePoints({ -175, 1, -15 }, 3, 15);
-	CreateScorePoints({ -175, 1, -70 }, 3, 15);
-	CreateScorePoints({ -100, 40, -25 }, 3, 15);
-	CreateScorePoints({ -25, 26, -25 }, 3, 15);
-	CreateScorePoints({ 100, 1, 0 }, 3, 15);
-
-	p2DynArray <Cube> reception_2 = App->physics->AddRamp({ -100, 68 , 70}, 70, 7, false, 0, 40, 3, 5);
+	p2DynArray <Cube> reception_2 = App->physics->AddRamp({ -100, 68 , 70 }, 70, 7, false, 0, 40, 3, 5);
 
 	for (int i = 0; i < reception_2.Count(); i++)
 	{
@@ -363,15 +394,6 @@ void ModuleSceneIntro::CreateMap()
 	{
 		scene_terrain.PushBack(ramp_10[i]);
 	}
-
-}
-
-void ModuleSceneIntro::CreateTerrain()
-{
-}
-
-void ModuleSceneIntro::CreateRamps()
-{
 }
 
 void ModuleSceneIntro::CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr)
@@ -390,6 +412,16 @@ void ModuleSceneIntro::CreateScorePoints(vec3 starting_position, uint num_points
 	}
 }
 
+void ModuleSceneIntro::CreateAllScorePoints()
+{
+	CreateScorePoints({ -175, 1, 120 }, 4, 15);
+	CreateScorePoints({ -175, 1, -15 }, 3, 15);
+	CreateScorePoints({ -175, 1, -70 }, 3, 15);
+	CreateScorePoints({ -100, 40, -25 }, 3, 15);
+	CreateScorePoints({ -25, 26, -25 }, 3, 15);
+	CreateScorePoints({ 100, 1, 0 }, 3, 15);
+}
+
 void ModuleSceneIntro::DestroyScorePoint(PhysBody3D* point)
 {
 	for (int i = 0; i < scene_points_pb.Count(); i++)
@@ -402,6 +434,17 @@ void ModuleSceneIntro::DestroyScorePoint(PhysBody3D* point)
 	}
 }
 
+void ModuleSceneIntro::ResetScorePoints()
+{
+	for (int i = 0; i < scene_points.Count(); i++)
+	{
+		scene_points.Pop(scene_points[i]);
+		scene_points_pb.Pop(scene_points_pb[i]);
+	}
+
+	CreateAllScorePoints();
+}
+
 void ModuleSceneIntro::CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotation)
 {
 	PhysBody3D* checkpoint = App->physics->AddBody(Cube(size.x, size.y, size.z), 0);
@@ -409,5 +452,41 @@ void ModuleSceneIntro::CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotati
 	checkpoint->SetType(PhysBody3D::type::CHECKPOINT);
 	checkpoint->SetPos(pos.x, pos.y, pos.z);
 	checkpoint->SetRotation(rotation);
+}
+
+int ModuleSceneIntro::GetTotalScore()
+{
+	return score*App->player->max_height+time_left;
+}
+
+void ModuleSceneIntro::Win()
+{
+	if (GetTotalScore() > 0 && GetTotalScore() < 4000) {
+		LOG("ONE STAR");
+	}
+	else if (GetTotalScore() > 4001 && GetTotalScore() < 8000)
+	{
+		LOG("TWO STARS");
+	}else LOG("THREE STARS");
+
+	App->pause = true;
+	Restart();
+}
+
+void ModuleSceneIntro::Lose()
+{
+	LOG("U LOST LMAO");
+	App->pause = true;
+	Restart();
+}
+
+void ModuleSceneIntro::Restart()
+{
+	btQuaternion player_start_rot({ 0, 1, 0 }, 3.14);
+	ResetScorePoints();
+	App->player->SetPosition(player_start_pos.x, player_start_pos.y, player_start_pos.z);
+	App->player->SetRotation(player_start_rot);
+	score = 0;
+	total_time->Start();
 }
 

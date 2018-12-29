@@ -39,6 +39,8 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+	
+	bool pause = false;
 
 private:
 

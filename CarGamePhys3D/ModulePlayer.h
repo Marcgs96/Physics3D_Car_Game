@@ -22,13 +22,18 @@ public:
 	bool CleanUp();
 
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
+
+	void SetPosition(int x, int y, int z);
+	void SetRotation(btQuaternion rot);
 	vec3 GetSavedPosition();
 	void SetSavedPosition(vec3 pos);
 	btQuaternion GetSavedRotation();
 	void SetSavedRotation(btQuaternion rotation);
+	float GetVehicleSpeed();
 
+	float max_height = 0;
 
-public:
+private:
 
 	PhysVehicle3D* vehicle;
 	float turn;
@@ -36,7 +41,6 @@ public:
 	float speed;
 	float brake;
 	float offset_x = 0;
-	float max_height = 0;
 	vec3 saved_position = { -175, 1, 190 };
 	btQuaternion saved_rotation;
 };

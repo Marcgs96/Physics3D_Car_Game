@@ -23,8 +23,8 @@ Application::Application()
 	AddModule(physics);
 	
 	// Scenes
-	AddModule(scene_intro);
 	AddModule(player);
+	AddModule(scene_intro);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -71,7 +71,8 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
+	if(!pause)dt = (float)ms_timer.Read() / 1000.0f;
+	else dt = 0;
 	ms_timer.Start();
 }
 
