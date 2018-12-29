@@ -31,7 +31,7 @@ public:
 
 public:
 	uint score = 0;
-
+	
 	Cube floor;
 
 	p2DynArray <Cube> scene_terrain;

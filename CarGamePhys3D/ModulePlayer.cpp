@@ -208,9 +208,7 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->GetBody()->clearForces();
 	}
 
-
-	vec3 up_pos = { vehicle->GetPos().x, vehicle->GetPos().y + 5, vehicle->GetPos().z };
-	App->camera->LookAt(up_pos);
+	App->camera->LookAt(upward_vector+vehicle->GetPos());
 
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);

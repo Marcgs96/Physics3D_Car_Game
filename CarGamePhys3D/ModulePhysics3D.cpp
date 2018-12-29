@@ -243,7 +243,6 @@ PhysBody3D* ModulePhysics3D::AddBody(const Cube& cube, float mass)
 	btRigidBody* body = new btRigidBody(rbInfo);
 	PhysBody3D* pbody = new PhysBody3D(body);
 
-	body->setUserPointer(pbody);
 	world->addRigidBody(body);
 	bodies.add(pbody);
 
@@ -270,7 +269,6 @@ PhysBody3D* ModulePhysics3D::AddBody(const Cylinder& cylinder, float mass)
 	btRigidBody* body = new btRigidBody(rbInfo);
 	PhysBody3D* pbody = new PhysBody3D(body);
 
-	body->setUserPointer(pbody);
 	world->addRigidBody(body);
 	bodies.add(pbody);
 
@@ -356,7 +354,7 @@ p2DynArray <Cube> ModulePhysics3D::AddRamp(vec3 position, int radius, int size, 
 			loopincr -= 0.2F;
 		}
 		Cube current_cube(cube_size_x, cube_size_y, cube_size_z);
-		current_cube.color = { 0, 0, 255, 100 };
+		current_cube.color = Blue;
 		PhysBody3D* pbody = AddBody(current_cube, 0);
 		vec3 next_position = rotate(circle_center-position, angle, { 1, 0, 0});
 		btQuaternion rotation;
