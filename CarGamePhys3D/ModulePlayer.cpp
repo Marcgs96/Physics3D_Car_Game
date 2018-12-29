@@ -21,7 +21,7 @@ bool ModulePlayer::Start()
 	VehicleInfo car;
 
 	// Car properties ----------------------------------------
-	car.chassis_size.Set(2.5, 1, 4);
+	car.chassis_size.Set(3, 1, 4);
 	car.chassis_offset.Set(0, 1, 0);
 
 	car.chassis_size2.Set(3, 0.12, 0.75);
@@ -52,7 +52,7 @@ bool ModulePlayer::Start()
 
 	// Don't change anything below this line ------------------
 
-	float half_width = car.chassis_size.x*0.5f;
+	float half_width = car.chassis_size.x*0.6f;
 	float half_length = car.chassis_size.z*0.5f;
 	
 	vec3 direction(0,-1,0);

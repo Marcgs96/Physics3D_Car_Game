@@ -65,7 +65,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
 	{
-		Win();
+		Win();		
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
@@ -99,7 +99,10 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			App->player->SetSavedRotation(rotation);
 		}break;
 		case PhysBody3D::type::END: {
-			Win();
+			if (!App->pause)
+			{
+				Win();
+			}
 		}break;
 		default:
 			break;
@@ -289,6 +292,12 @@ void ModuleSceneIntro::CreateTerrain()
 	scene_terrain.PushBack(wall10);
 	App->physics->AddBody(wall10, 0);
 
+	Cube end(200, 200, 40);
+	end.SetPos(100, 100, -150);
+	PhysBody3D* endsensor = App->physics->AddBody(end, 0);
+	endsensor->SetType(PhysBody3D::type::END);
+	endsensor->SetAsSensor(true);
+
 	floor = { 400, 0, 400 };
 	floor.color = DarkGray;
 	scene_terrain.PushBack(floor);
@@ -468,8 +477,6 @@ void ModuleSceneIntro::Win()
 	{
 		LOG("TWO STARS");
 	}else LOG("THREE STARS");
-
-	App->pause = true;
 	Restart();
 }
 
@@ -488,5 +495,6 @@ void ModuleSceneIntro::Restart()
 	App->player->SetRotation(player_start_rot);
 	score = 0;
 	total_time->Start();
+	App->pause = true;
 }
 
