@@ -481,14 +481,14 @@ void ModuleSceneIntro::Win()
 	int star_counter = 0;
 	stars.Clear();
 
-	if (GetTotalScore() > 0 && GetTotalScore() < 4000) {
+	if (GetTotalScore() > 0 && GetTotalScore() < 10000) {
 		star_counter = 0;
 	}
-	if (GetTotalScore() > 4001 && GetTotalScore() < 8000)
+	if (GetTotalScore() > 10001 && GetTotalScore() < 20000)
 	{
 		star_counter = 1;
 	}
-	if(GetTotalScore() > 8000){
+	if(GetTotalScore() > 2000){
 		star_counter = 2;
 	}
 
