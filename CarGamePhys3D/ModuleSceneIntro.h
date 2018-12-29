@@ -45,7 +45,7 @@ private:
 	p2DynArray <Sphere> scene_spheres;
 	p2DynArray <Cylinder> scene_cylinders;
 
-	Cube stars[3];
+	p2DynArray <Cube> stars;
 
 	Timer* total_time = nullptr;
 	Uint32 max_time_per_level = 110;

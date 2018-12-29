@@ -76,7 +76,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (on_win_scene)
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < stars.Count(); i++)
 		{
 			stars[i].Render();
 		}
@@ -479,15 +479,16 @@ int ModuleSceneIntro::GetTotalScore()
 void ModuleSceneIntro::Win()
 {
 	int star_counter = 0;
+	stars.Clear();
 
 	if (GetTotalScore() > 0 && GetTotalScore() < 4000) {
 		star_counter = 0;
 	}
-	else if (GetTotalScore() > 4001 && GetTotalScore() < 8000)
+	if (GetTotalScore() > 4001 && GetTotalScore() < 8000)
 	{
 		star_counter = 1;
 	}
-	else {
+	if(GetTotalScore() > 8000){
 		star_counter = 2;
 	}
 
@@ -497,7 +498,7 @@ void ModuleSceneIntro::Win()
 
 	for (int i = 0; i <= star_counter; i++)
 	{
-		stars[i] = Cube(2, 2, 2);
+		stars.PushBack(Cube(2, 2, 2));
 		stars[i].color = Yellow;
 		switch (i)
 		{
@@ -527,6 +528,7 @@ void ModuleSceneIntro::Restart()
 	App->player->SetSavedPosition(player_start_pos);
 	App->player->SetSavedRotation(player_start_rot);
 	score = 0;
+	App->player->max_height = 0;
 	total_time->Start();
 	App->pause = true;
 }
