@@ -134,6 +134,11 @@ void ModulePlayer::SetPosition(int x, int y, int z)
 	vehicle->SetPos(x, y, z);
 }
 
+vec3 ModulePlayer::GetPosition()
+{
+	return vehicle->GetPos();
+}
+
 void ModulePlayer::SetRotation(btQuaternion rot)
 {
 	vehicle->SetRotation(rot);

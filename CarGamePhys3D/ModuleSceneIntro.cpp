@@ -71,6 +71,15 @@ update_status ModuleSceneIntro::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		App->pause = false;
+		on_win_scene = false;
+	}
+
+	if (on_win_scene)
+	{
+		for (int i = 0; i < 3; i++)
+		{
+			stars[i].Render();
+		}
 	}
 
 	char title[1000];
@@ -99,7 +108,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			App->player->SetSavedRotation(rotation);
 		}break;
 		case PhysBody3D::type::END: {
-			if (!App->pause)
+			if (!on_win_scene)
 			{
 				Win();
 			}
@@ -114,7 +123,6 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 
 void ModuleSceneIntro::CreateMap()
 {
-
 	CreateTerrain();
 	CreateRamps();
 	CreateAllScorePoints();
@@ -292,8 +300,8 @@ void ModuleSceneIntro::CreateTerrain()
 	scene_terrain.PushBack(wall10);
 	App->physics->AddBody(wall10, 0);
 
-	Cube end(200, 200, 40);
-	end.SetPos(100, 100, -150);
+	Cube end(100, 200, 40);
+	end.SetPos(150, 100, -180);
 	PhysBody3D* endsensor = App->physics->AddBody(end, 0);
 	endsensor->SetType(PhysBody3D::type::END);
 	endsensor->SetAsSensor(true);
@@ -470,14 +478,37 @@ int ModuleSceneIntro::GetTotalScore()
 
 void ModuleSceneIntro::Win()
 {
+	int star_counter = 0;
+
 	if (GetTotalScore() > 0 && GetTotalScore() < 4000) {
-		LOG("ONE STAR");
+		star_counter = 0;
 	}
 	else if (GetTotalScore() > 4001 && GetTotalScore() < 8000)
 	{
-		LOG("TWO STARS");
-	}else LOG("THREE STARS");
+		star_counter = 1;
+	}
+	else {
+		star_counter = 2;
+	}
+
+	on_win_scene = true;
 	Restart();
+
+
+	for (int i = 0; i <= star_counter; i++)
+	{
+		stars[i] = Cube(2, 2, 2);
+		stars[i].color = Yellow;
+		switch (i)
+		{
+		case 0: stars[i].SetPos(App->player->GetPosition().x - 3, App->player->GetPosition().y + 8, App->player->GetPosition().z); break;
+		case 1: stars[i].SetPos(App->player->GetPosition().x, App->player->GetPosition().y + 8, App->player->GetPosition().z); break;
+		case 2: stars[i].SetPos(App->player->GetPosition().x + 3, App->player->GetPosition().y + 8, App->player->GetPosition().z); break;
+		default:
+			break;
+		}
+
+	}
 }
 
 void ModuleSceneIntro::Lose()
@@ -493,6 +524,8 @@ void ModuleSceneIntro::Restart()
 	ResetScorePoints();
 	App->player->SetPosition(player_start_pos.x, player_start_pos.y, player_start_pos.z);
 	App->player->SetRotation(player_start_rot);
+	App->player->SetSavedPosition(player_start_pos);
+	App->player->SetSavedRotation(player_start_rot);
 	score = 0;
 	total_time->Start();
 	App->pause = true;

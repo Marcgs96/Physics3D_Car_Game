@@ -24,6 +24,7 @@ public:
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
 	void SetPosition(int x, int y, int z);
+	vec3 GetPosition();
 	void SetRotation(btQuaternion rot);
 	vec3 GetSavedPosition();
 	void SetSavedPosition(vec3 pos);

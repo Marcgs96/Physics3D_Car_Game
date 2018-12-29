@@ -45,9 +45,13 @@ private:
 	p2DynArray <Sphere> scene_spheres;
 	p2DynArray <Cylinder> scene_cylinders;
 
+	Cube stars[3];
+
 	Timer* total_time = nullptr;
 	Uint32 max_time_per_level = 110;
 	Uint32 time_left = 0;
 
-	vec3 player_start_pos = { -175, 1, 190 };
+	vec3 player_start_pos = { -175, 0, 190 };
+
+	bool on_win_scene = false;
 };
