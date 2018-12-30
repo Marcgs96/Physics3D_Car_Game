@@ -175,6 +175,11 @@ vec3 ModulePlayer::GetUpwardPosition()
 	return vehicle->GetUpwardVector();
 }
 
+PhysBody3D * ModulePlayer::GetVehicle()
+{
+	return vehicle;
+}
+
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
@@ -238,7 +243,7 @@ update_status ModulePlayer::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		if (App->scene_intro->on_win_scene)
+		if (App->pause)
 		{
 			vehicle->GetBody()->clearForces();
 			vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
