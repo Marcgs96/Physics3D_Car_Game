@@ -181,15 +181,21 @@ update_status ModulePlayer::Update(float dt)
 	turn = acceleration = brake = 0.0f;
 	speed = vehicle->GetKmh();
 
-	vec3 forward_vector = vehicle->GetForwardVector();
-	vec3 upward_vector = vehicle->GetUpwardVector();
-	
-	forward_vector = -forward_vector;
-	forward_vector = forward_vector * 11;
-	upward_vector = upward_vector * 5;
+	if (!App->camera->debug)
+	{
 
-	vec3 campos = forward_vector + upward_vector;
-	App->camera->Position = campos + vehicle->GetPos();
+		vec3 forward_vector = vehicle->GetForwardVector();
+		vec3 upward_vector = vehicle->GetUpwardVector();
+
+		forward_vector = -forward_vector;
+		forward_vector = forward_vector * 11;
+		upward_vector = upward_vector * 5;
+
+		vec3 campos = forward_vector + upward_vector;
+		App->camera->Position = campos + vehicle->GetPos();
+
+		App->camera->LookAt(upward_vector + vehicle->GetPos());
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
@@ -238,8 +244,6 @@ update_status ModulePlayer::Update(float dt)
 			vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
 		}
 	}
-
-	App->camera->LookAt(upward_vector+vehicle->GetPos());
 
 	vehicle->ApplyEngineForce(acceleration);
 	vehicle->Turn(turn);

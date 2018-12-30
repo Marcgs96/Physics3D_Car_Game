@@ -74,9 +74,12 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		Restart();
-		App->pause = false;
-		on_win_scene = false;
+		if (on_win_scene)
+		{
+			Restart();
+			App->pause = false;
+			on_win_scene = false;
+		}
 	}
 
 	if (on_win_scene)
@@ -421,6 +424,7 @@ void ModuleSceneIntro::CreateRamps()
 
 void ModuleSceneIntro::CreateScorePoints(vec3 starting_position, uint num_points, uint pos_incr)
 {
+	int incr = pos_incr;
 	for (int i = 0; i < num_points; i++)
 	{
 		Cube points(2, 2, 2);
@@ -429,7 +433,7 @@ void ModuleSceneIntro::CreateScorePoints(vec3 starting_position, uint num_points
 		scene_points.PushBack(points);
 		PhysBody3D* sensor = App->physics->AddBody(points, 0);
 		sensor->SetAsSensor(true);
-		pos_incr += 15;
+		pos_incr += incr;
 		sensor->SetType(PhysBody3D::type::POINT);
 		scene_points_pb.PushBack(sensor);
 	}
@@ -439,10 +443,66 @@ void ModuleSceneIntro::CreateAllScorePoints()
 {
 	CreateScorePoints({ -175, 1, 120 }, 4, 15);
 	CreateScorePoints({ -175, 1, -15 }, 3, 15);
-	CreateScorePoints({ -175, 1, -70 }, 3, 15);
-	CreateScorePoints({ -100, 40, -25 }, 3, 15);
-	CreateScorePoints({ -25, 26, -25 }, 3, 15);
-	CreateScorePoints({ 100, 1, 0 }, 3, 15);
+	CreateScorePoints({ -175, 1, -65 }, 3, 15);
+	CreateScorePoints({ -167, 32, -65 }, 1, 15);
+	CreateScorePoints({ -158, 1, -175 }, 8, 15);
+	CreateScorePoints({ -82, 1, -190 }, 4, 15);
+	CreateScorePoints({ -90, 32, -150 }, 1, 15);
+	CreateScorePoints({ -100, 1, -155 }, 4, 15);
+	CreateScorePoints({ -100, 32, -25 }, 3, 5);
+	CreateScorePoints({ -100, 1, 60 }, 8, 15);
+	CreateScorePoints({ -25, 1, 60 }, 8, 15);
+	CreateScorePoints({ -25, 28, -30 }, 3, 5);
+	CreateScorePoints({ -25, 32, -30 }, 3, 5);
+	CreateScorePoints({ -25, 36, -30 }, 3, 5);
+	CreateScorePoints({ -25, 1, -180 }, 4, 15);
+	CreateScorePoints({ 55, 1, -198 }, 4, 15);
+	CreateScorePoints({ 50, 32, -156 }, 1, 15);
+	CreateScorePoints({ 42, 1, -155 }, 4, 15);
+	CreateScorePoints({ 42, 34, -30 }, 5, 5);
+	CreateScorePoints({ 42, 30, -30 }, 5, 5);
+	CreateScorePoints({ 42, 38, -30 }, 5, 5);
+	CreateScorePoints({ 38, 34, -30 }, 5, 5);
+	CreateScorePoints({ 46, 34, -30 }, 5, 5);
+	CreateScorePoints({ 45, 1, 55 }, 3, 15);
+	CreateScorePoints({ 55, 1, 60 }, 4, 15);
+	CreateScorePoints({ 50, 30, 100 }, 1, 15);
+	CreateScorePoints({ 55, 2, 150 }, 4, 5);
+	CreateScorePoints({ 65, 50, 215 }, 1, 5);
+	CreateScorePoints({ 70, 50, 215 }, 1, 5);
+	CreateScorePoints({ 75, 50, 215 }, 1, 5);
+	CreateScorePoints({ 80, 50, 215 }, 1, 5);
+	CreateScorePoints({ 85, 50, 215 }, 1, 5);
+	CreateScorePoints({ 90, 50, 215 }, 1, 5);
+	CreateScorePoints({ 95, 50, 215 }, 1, 5);
+	CreateScorePoints({ 100, 50, 215 }, 1, 5);
+	CreateScorePoints({ 105, 50, 215 }, 1, 5);
+	CreateScorePoints({ 110, 50, 215 }, 1, 5);
+	CreateScorePoints({ 115, 50, 215 }, 1, 5);
+	CreateScorePoints({ 120, 50, 215 }, 1, 5);
+	CreateScorePoints({ 125, 50, 215 }, 1, 5);
+	CreateScorePoints({ 130, 50, 215 }, 1, 5);
+
+	CreateScorePoints({ 100, 1, 60 }, 9, 10);
+	CreateScorePoints({ 105, 1, 60 }, 9, 10);
+	CreateScorePoints({ 110, 1, 60 }, 9, 10);
+	CreateScorePoints({ 115, 1, 60 }, 9, 10);
+	CreateScorePoints({ 120, 1, 60 }, 9, 10);
+	CreateScorePoints({ 125, 1, 60 }, 9, 10);
+	CreateScorePoints({ 130, 1, 60 }, 9, 10);
+	CreateScorePoints({ 135, 1, 60 }, 9, 10);
+	CreateScorePoints({ 140, 1, 60 }, 9, 10);
+	CreateScorePoints({ 145, 1, 60 }, 9, 10);
+	CreateScorePoints({ 150, 1, 60 }, 9, 10);
+	CreateScorePoints({ 155, 1, 60 }, 9, 10);
+	CreateScorePoints({ 160, 1, 60 }, 9, 10);
+	CreateScorePoints({ 165, 1, 60 }, 9, 10);
+	CreateScorePoints({ 170, 1, 60 }, 9, 10);
+	CreateScorePoints({ 175, 1, 60 }, 9, 10);
+	CreateScorePoints({ 180, 1, 60 }, 9, 10);
+	CreateScorePoints({ 185, 1, 60 }, 9, 10);
+	CreateScorePoints({ 190, 1, 60 }, 9, 10);
+	CreateScorePoints({ 195, 1, 60 }, 9, 10);
 }
 
 void ModuleSceneIntro::DestroyScorePoint(PhysBody3D* point)
@@ -479,7 +539,7 @@ void ModuleSceneIntro::CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotati
 
 int ModuleSceneIntro::GetTotalScore()
 {
-	return score*App->player->max_height+time_left;
+	return score/150;
 }
 
 void ModuleSceneIntro::Win()
@@ -489,14 +549,14 @@ void ModuleSceneIntro::Win()
 
 	App->audio->PlayFx(win_fx);
 
-	if (GetTotalScore() > 0 && GetTotalScore() < 10000) {
+	if (GetTotalScore() > 0 && GetTotalScore() < 30) {
 		star_counter = 0;
 	}
-	if (GetTotalScore() > 10001 && GetTotalScore() < 20000)
+	if (GetTotalScore() > 30 && GetTotalScore() < 60)
 	{
 		star_counter = 1;
 	}
-	if(GetTotalScore() > 2000){
+	if(GetTotalScore() > 60){
 		star_counter = 2;
 	}
 
@@ -523,7 +583,6 @@ void ModuleSceneIntro::Lose()
 {
 	LOG("U LOST LMAO");
 	App->pause = true;
-	Restart();
 }
 
 void ModuleSceneIntro::Restart()
