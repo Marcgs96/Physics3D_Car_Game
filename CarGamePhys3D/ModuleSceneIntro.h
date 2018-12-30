@@ -27,6 +27,8 @@ public:
 	void ResetScorePoints();
 	void CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotation);
 
+	void addPendulum(vec3 position, int height, int dir = 0);
+
 	int GetTotalScore();
 	void Win();
 	void Lose();
@@ -50,6 +52,7 @@ private:
 	p2DynArray <Cube> scene_points;
 	p2DynArray <PhysBody3D*> scene_points_pb;
 	p2DynArray <Sphere> scene_spheres;
+	p2DynArray <PhysBody3D*> scene_spheres_pb;
 	p2DynArray <Cylinder> scene_cylinders;
 
 	p2DynArray <Cube> stars;
