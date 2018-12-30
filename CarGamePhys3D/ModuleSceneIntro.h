@@ -54,6 +54,8 @@ private:
 
 	p2DynArray <Cube> stars;
 
+	PhysBody3D* endsensor;
+
 	Timer* total_time = nullptr;
 	Uint32 max_time_per_level = 110;
 	Uint32 time_left = 0;

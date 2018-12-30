@@ -110,6 +110,8 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{
 		switch (body2->GetType())
 		{
+		case PhysBody3D::type::END:
+			if (!on_win_scene)Win(); break;
 		case PhysBody3D::type::POINT:
 			DestroyScorePoint(body2);
 			score += 150;
@@ -119,13 +121,8 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			App->player->SetSavedPosition(body2->GetPos());
 			btQuaternion rotation(body2->GetRotation().getAxis(), body2->GetRotation().getAngle());
 			App->player->SetSavedRotation(rotation);
-		}break;
-		case PhysBody3D::type::END: {
-			if (!on_win_scene)
-			{
-				Win();
-			}
-		}break;
+		}
+		break;
 		default:
 			break;
 		}
@@ -141,6 +138,12 @@ void ModuleSceneIntro::CreateMap()
 
 void ModuleSceneIntro::CreateTerrain()
 {
+	Cube end(100, 100, 40);
+	end.SetPos(145, 52, -175);
+	endsensor = App->physics->AddBody(end, 0);
+	endsensor->SetType(PhysBody3D::type::END);
+	endsensor->SetAsSensor(true);
+
 	Cube way1(50, 0.2F, 400);
 	way1.color = White;
 	way1.SetPos(-170, 0, 0);
@@ -311,12 +314,6 @@ void ModuleSceneIntro::CreateTerrain()
 	scene_terrain.PushBack(wall10);
 	App->physics->AddBody(wall10, 0);
 
-	Cube end(100, 100, 40);
-	end.SetPos(145, 52, -175);
-	PhysBody3D* endsensor = App->physics->AddBody(end, 0);
-	endsensor->SetType(PhysBody3D::type::END);
-	endsensor->SetAsSensor(true);
-
 	floor = { 400, 0, 400 };
 	floor.color = DarkGray;
 	scene_terrain.PushBack(floor);
@@ -470,20 +467,20 @@ void ModuleSceneIntro::CreateAllScorePoints()
 	CreateScorePoints({ 55, 1, 60 }, 4, 15);
 	CreateScorePoints({ 50, 30, 100 }, 1, 15);
 	CreateScorePoints({ 55, 2, 150 }, 4, 5);
-	CreateScorePoints({ 65, 50, 215 }, 1, 5);
-	CreateScorePoints({ 70, 50, 215 }, 1, 5);
-	CreateScorePoints({ 75, 50, 215 }, 1, 5);
-	CreateScorePoints({ 80, 50, 215 }, 1, 5);
-	CreateScorePoints({ 85, 50, 215 }, 1, 5);
-	CreateScorePoints({ 90, 50, 215 }, 1, 5);
-	CreateScorePoints({ 95, 50, 215 }, 1, 5);
-	CreateScorePoints({ 100, 50, 215 }, 1, 5);
-	CreateScorePoints({ 105, 50, 215 }, 1, 5);
-	CreateScorePoints({ 110, 50, 215 }, 1, 5);
-	CreateScorePoints({ 115, 50, 215 }, 1, 5);
-	CreateScorePoints({ 120, 50, 215 }, 1, 5);
-	CreateScorePoints({ 125, 50, 215 }, 1, 5);
-	CreateScorePoints({ 130, 50, 215 }, 1, 5);
+	CreateScorePoints({ 65, 50, 220 }, 1, 5);
+	CreateScorePoints({ 70, 50, 220 }, 1, 5);
+	CreateScorePoints({ 75, 50, 220 }, 1, 5);
+	CreateScorePoints({ 80, 50, 220 }, 1, 5);
+	CreateScorePoints({ 85, 50, 220 }, 1, 5);
+	CreateScorePoints({ 90, 50, 220 }, 1, 5);
+	CreateScorePoints({ 95, 50, 220 }, 1, 5);
+	CreateScorePoints({ 100, 50, 220 }, 1, 5);
+	CreateScorePoints({ 105, 50, 220 }, 1, 5);
+	CreateScorePoints({ 110, 50, 220 }, 1, 5);
+	CreateScorePoints({ 115, 50, 220 }, 1, 5);
+	CreateScorePoints({ 120, 50, 220 }, 1, 5);
+	CreateScorePoints({ 125, 50, 220 }, 1, 5);
+	CreateScorePoints({ 130, 50, 220 }, 1, 5);
 
 	CreateScorePoints({ 100, 1, 60 }, 9, 10);
 	CreateScorePoints({ 105, 1, 60 }, 9, 10);
