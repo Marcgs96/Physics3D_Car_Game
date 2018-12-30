@@ -74,7 +74,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		if (on_win_scene)
+		if (App->pause)
 		{
 			Restart();
 			App->pause = false;
@@ -92,22 +92,26 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	char title[1000];
 	Uint32 sec = total_time->Read() / 1000;
-	time_left = max_time_per_level - sec;
+	if(!App->pause)time_left = max_time_per_level - sec;
 	sprintf_s(title, "SECONDS LEFT: %u - SCORE :%i - MAX HEIGHT: %.1f - VELOCITY: %.1f Km/h", time_left, App->scene_intro->score, App->player->max_height, App->player->GetVehicleSpeed());
 	App->window->SetTitle(title);
+
+	if (time_left == 0)
+	{
+		Lose();
+	}
 
 	return UPDATE_CONTINUE;
 }
 
 void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 {
-	if (body1->active && body2->active)
+	if (body1->active && body2->active && body1 == App->player->GetVehicle())
 	{
 		switch (body2->GetType())
 		{
 		case PhysBody3D::type::POINT:
 			DestroyScorePoint(body2);
-			App->physics->DestroyBody(body2);
 			score += 150;
 			App->audio->PlayFx(coin_fx);
 			break;
@@ -126,8 +130,6 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			break;
 		}
 	}
-
-	if (time_left == 0)Lose();
 }
 
 void ModuleSceneIntro::CreateMap()
@@ -313,6 +315,9 @@ void ModuleSceneIntro::CreateTerrain()
 
 	Cube end(100, 200, 40);
 	end.SetPos(150, 100, -180);
+
+	Cube end(100, 100, 40);
+	end.SetPos(145, 52, -175);
 	PhysBody3D* endsensor = App->physics->AddBody(end, 0);
 	endsensor->SetType(PhysBody3D::type::END);
 	endsensor->SetAsSensor(true);
@@ -332,7 +337,7 @@ void ModuleSceneIntro::CreateRamps()
 	}
 
 	p2DynArray <Cube> reception_1 = App->physics->AddRamp({ -175, 68 , 30 }, 70, 8, false, 1, 20, 3, 7);
-
+	
 	for (int i = 0; i < reception_1.Count(); i++)
 	{
 		scene_terrain.PushBack(reception_1[i]);
@@ -505,6 +510,8 @@ void ModuleSceneIntro::CreateAllScorePoints()
 	CreateScorePoints({ 185, 1, 60 }, 9, 10);
 	CreateScorePoints({ 190, 1, 60 }, 9, 10);
 	CreateScorePoints({ 195, 1, 60 }, 9, 10);
+
+	score_points_full = true;
 }
 
 void ModuleSceneIntro::DestroyScorePoint(PhysBody3D* point)
@@ -513,8 +520,8 @@ void ModuleSceneIntro::DestroyScorePoint(PhysBody3D* point)
 	{
 		if (scene_points_pb[i] == point)
 		{
-			scene_points.Pop(scene_points[i]);
-			scene_points_pb.Pop(scene_points_pb[i]);
+			scene_points[i].color = White;
+			scene_points_pb[i]->active = false;
 		}
 	}
 }
@@ -523,11 +530,13 @@ void ModuleSceneIntro::ResetScorePoints()
 {
 	for (int i = 0; i < scene_points.Count(); i++)
 	{
-		scene_points.Pop(scene_points[i]);
-		scene_points_pb.Pop(scene_points_pb[i]);
+		scene_points[i].color = Yellow;
 	}
 
-	CreateAllScorePoints();
+	for (int i = 0; i < scene_points_pb.Count(); i++)
+	{
+		scene_points_pb[i]->active = true;
+	}
 }
 
 void ModuleSceneIntro::CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotation)
@@ -600,8 +609,7 @@ void ModuleSceneIntro::Win()
 
 void ModuleSceneIntro::Lose()
 {
-	LOG("U LOST LMAO");
-	App->pause = true;
+	if(!App->pause)App->pause = true;
 }
 
 void ModuleSceneIntro::Restart()

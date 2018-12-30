@@ -43,6 +43,8 @@ private:
 
 	unsigned int coin_fx;
 	unsigned int win_fx;
+
+	bool score_points_full = false;
 	
 	Cube floor;
 
