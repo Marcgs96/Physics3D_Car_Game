@@ -311,8 +311,8 @@ void ModuleSceneIntro::CreateTerrain()
 	scene_terrain.PushBack(wall10);
 	App->physics->AddBody(wall10, 0);
 
-	Cube end(100, 200, 40);
-	end.SetPos(150, 100, -180);
+	Cube end(100, 100, 40);
+	end.SetPos(145, 52, -175);
 	PhysBody3D* endsensor = App->physics->AddBody(end, 0);
 	endsensor->SetType(PhysBody3D::type::END);
 	endsensor->SetAsSensor(true);
