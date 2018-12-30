@@ -27,6 +27,8 @@ public:
 	void ResetScorePoints();
 	void CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotation);
 
+	void addPendulum(vec3 position, int height, int dir = 0);
+
 	int GetTotalScore();
 	void Win();
 	void Lose();

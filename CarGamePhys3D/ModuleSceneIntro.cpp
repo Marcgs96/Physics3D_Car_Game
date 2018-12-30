@@ -309,6 +309,8 @@ void ModuleSceneIntro::CreateTerrain()
 	scene_terrain.PushBack(wall10);
 	App->physics->AddBody(wall10, 0);
 
+	addPendulum({ 0,40,-100 }, 10);
+
 	Cube end(100, 200, 40);
 	end.SetPos(150, 100, -180);
 	PhysBody3D* endsensor = App->physics->AddBody(end, 0);
@@ -535,6 +537,23 @@ void ModuleSceneIntro::CreateCheckPoint(vec3 pos, vec3 size, btQuaternion rotati
 	checkpoint->SetType(PhysBody3D::type::CHECKPOINT);
 	checkpoint->SetPos(pos.x, pos.y, pos.z);
 	checkpoint->SetRotation(rotation);
+}
+
+void ModuleSceneIntro::addPendulum(vec3 position, int height, int dir)
+{
+		Cube top_base(20, 20, 20);
+		top_base.color = White;
+		top_base.SetPos(position.x, position.y + 80, position.z );
+		PhysBody3D* tpbody = App->physics->AddBody(top_base, 0);
+		scene_terrain.PushBack(top_base);
+		Sphere pendulum(15);
+		pendulum.color = White;
+		pendulum.SetPos(position.x, position.y+30, position.z);
+		PhysBody3D* spbody = App->physics->AddBody(pendulum, 300);
+		scene_spheres.PushBack(pendulum);
+		App->physics->AddConstraintP2P(*tpbody, *spbody, { 0,0,0 }, { -60,35,0 });
+		
+		
 }
 
 int ModuleSceneIntro::GetTotalScore()
