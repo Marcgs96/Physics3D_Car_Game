@@ -31,6 +31,7 @@ public:
 	btQuaternion GetSavedRotation();
 	void SetSavedRotation(btQuaternion rotation);
 	float GetVehicleSpeed();
+	vec3 GetUpwardPosition();
 
 	float max_height = 0;
 

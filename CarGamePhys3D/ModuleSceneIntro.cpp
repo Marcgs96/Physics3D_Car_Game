@@ -27,6 +27,10 @@ bool ModuleSceneIntro::Start()
 	App->player->SetSavedPosition(player_start_pos);
 	App->player->SetSavedRotation(player_start_rot);
 
+	App->audio->PlayMusic("Audio/DarudeSandstorm.ogg", 0.0f);
+	coin_fx = App->audio->LoadFx("Audio/coin.wav");
+	win_fx = App->audio->LoadFx("Audio/win.wav");
+
 	return ret;
 }
 
@@ -70,6 +74,7 @@ update_status ModuleSceneIntro::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
+		Restart();
 		App->pause = false;
 		on_win_scene = false;
 	}
@@ -101,6 +106,7 @@ void ModuleSceneIntro::OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 			DestroyScorePoint(body2);
 			App->physics->DestroyBody(body2);
 			score += 150;
+			App->audio->PlayFx(coin_fx);
 			break;
 		case PhysBody3D::type::CHECKPOINT: {
 			App->player->SetSavedPosition(body2->GetPos());
@@ -481,6 +487,8 @@ void ModuleSceneIntro::Win()
 	int star_counter = 0;
 	stars.Clear();
 
+	App->audio->PlayFx(win_fx);
+
 	if (GetTotalScore() > 0 && GetTotalScore() < 10000) {
 		star_counter = 0;
 	}
@@ -492,24 +500,23 @@ void ModuleSceneIntro::Win()
 		star_counter = 2;
 	}
 
-	on_win_scene = true;
-	Restart();
-
-
 	for (int i = 0; i <= star_counter; i++)
 	{
-		stars.PushBack(Cube(2, 2, 2));
+		stars.PushBack(Cube(2,2, 2));
 		stars[i].color = Yellow;
 		switch (i)
 		{
-		case 0: stars[i].SetPos(App->player->GetPosition().x - 3, App->player->GetPosition().y + 8, App->player->GetPosition().z); break;
-		case 1: stars[i].SetPos(App->player->GetPosition().x, App->player->GetPosition().y + 8, App->player->GetPosition().z); break;
-		case 2: stars[i].SetPos(App->player->GetPosition().x + 3, App->player->GetPosition().y + 8, App->player->GetPosition().z); break;
+		case 0: stars[i].SetPos(App->player->GetUpwardPosition().x + App->player->GetPosition().x-5, App->player->GetUpwardPosition().y*5 + App->player->GetPosition().y, App->player->GetUpwardPosition().z*5 + App->player->GetPosition().z); break;
+		case 1: stars[i].SetPos(App->player->GetUpwardPosition().x + App->player->GetPosition().x, App->player->GetUpwardPosition().y*5 + App->player->GetPosition().y, App->player->GetUpwardPosition().z*5 + App->player->GetPosition().z); break;
+		case 2: stars[i].SetPos(App->player->GetUpwardPosition().x*5 + App->player->GetPosition().x+5, App->player->GetUpwardPosition().y*5 + App->player->GetPosition().y, App->player->GetUpwardPosition().z*5 + App->player->GetPosition().z); break;
 		default:
 			break;
 		}
 
 	}
+
+	on_win_scene = true;
+	App->pause = true;
 }
 
 void ModuleSceneIntro::Lose()
@@ -530,6 +537,6 @@ void ModuleSceneIntro::Restart()
 	score = 0;
 	App->player->max_height = 0;
 	total_time->Start();
-	App->pause = true;
+	App->audio->PlayMusic("Audio/DarudeSandstorm.ogg", 0.0f);
 }
 

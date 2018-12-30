@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModulePlayer.h"
+#include "ModuleSceneIntro.h"
 #include "Primitive.h"
 #include "PhysVehicle3D.h"
 #include "PhysBody3D.h"
@@ -169,6 +170,11 @@ float ModulePlayer::GetVehicleSpeed()
 	return speed;
 }
 
+vec3 ModulePlayer::GetUpwardPosition()
+{
+	return vehicle->GetUpwardVector();
+}
+
 // Update: draw background
 update_status ModulePlayer::Update(float dt)
 {
@@ -221,6 +227,16 @@ update_status ModulePlayer::Update(float dt)
 		vehicle->SetPos(saved_position.x, saved_position.y, saved_position.z);
 		vehicle->SetRotation(saved_rotation);
 		vehicle->GetBody()->clearForces();
+		vehicle->GetBody()->setLinearVelocity({ 0, 0, 0});
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		if (App->scene_intro->on_win_scene)
+		{
+			vehicle->GetBody()->clearForces();
+			vehicle->GetBody()->setLinearVelocity({ 0, 0, 0 });
+		}
 	}
 
 	App->camera->LookAt(upward_vector+vehicle->GetPos());

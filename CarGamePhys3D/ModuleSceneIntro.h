@@ -34,8 +34,13 @@ public:
 	
 	void OnCollision(PhysBody3D* body1, PhysBody3D* body2);
 
+	bool on_win_scene = false;
+
 private:
 	uint score = 0;
+
+	unsigned int coin_fx;
+	unsigned int win_fx;
 	
 	Cube floor;
 
@@ -53,5 +58,4 @@ private:
 
 	vec3 player_start_pos = { -175, 0, 190 };
 
-	bool on_win_scene = false;
 };
