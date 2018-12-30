@@ -43,10 +43,15 @@ bool ModuleSceneIntro::CleanUp()
 	{
 		scene_points_pb[i] = nullptr;
 	}
+	for (int i = 0; i < scene_spheres_pb.Count(); i++)
+	{
+		scene_spheres_pb[i] = nullptr;
+	}
 
 	scene_points_pb.Clear();
 	scene_points.Clear();
-
+	scene_spheres.Clear();
+	scene_spheres_pb.Clear();
 	scene_terrain.Clear();
 
 	total_time = nullptr;
@@ -65,6 +70,12 @@ update_status ModuleSceneIntro::Update(float dt)
 	for (int i = 0; i < scene_points.Count(); i++)
 	{
 		scene_points[i].Render();
+	}
+
+	for (int i = 0; i < scene_spheres.Count(); ++i)
+	{
+		scene_spheres_pb[i]->GetTransform(&scene_spheres[i].transform);
+		scene_spheres[i].Render();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
@@ -311,10 +322,8 @@ void ModuleSceneIntro::CreateTerrain()
 	scene_terrain.PushBack(wall10);
 	App->physics->AddBody(wall10, 0);
 
-	addPendulum({ 0,40,-100 }, 10);
-
-	Cube end(100, 200, 40);
-	end.SetPos(150, 100, -180);
+	addPendulum({ -25,30,0 }, 10);
+	addPendulum({ 100,40,-50 }, 10);
 
 	Cube end(100, 100, 40);
 	end.SetPos(145, 52, -175);
@@ -556,10 +565,11 @@ void ModuleSceneIntro::addPendulum(vec3 position, int height, int dir)
 		PhysBody3D* tpbody = App->physics->AddBody(top_base, 0);
 		scene_terrain.PushBack(top_base);
 		Sphere pendulum(15);
-		pendulum.color = White;
+		pendulum.color = Pink;
 		pendulum.SetPos(position.x, position.y+30, position.z);
 		PhysBody3D* spbody = App->physics->AddBody(pendulum, 300);
 		scene_spheres.PushBack(pendulum);
+		scene_spheres_pb.PushBack(spbody);
 		App->physics->AddConstraintP2P(*tpbody, *spbody, { 0,0,0 }, { -60,35,0 });
 		
 		
